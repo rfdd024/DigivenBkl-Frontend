@@ -133,14 +133,14 @@ const LoginPage = () => {
                 onClick={() => setMode('forgot-password')}
                 className="text-[#129990] hover:underline text-sm font-medium" // Added font-medium
               >
-                Lupa Kata Sandi?
+                Lupa Kata Sandi ?
               </button>
               <button
                 type="button"
                 onClick={() => setMode('resend-verification')}
                 className="text-[#129990] hover:underline text-sm font-medium" // Added font-medium
               >
-                Kirim Ulang Verifikasi Email
+                Tidak dapat Email Verifikasi ?
               </button>
             </div>
             <div className="text-center text-sm mt-4"> {/* Increased mt to 4 */}

@@ -10,7 +10,7 @@ import Link from 'next/link';
 import toast from 'react-hot-toast';
 
 const DashboardPage = () => {
-  const { isAuthenticated, userProfile, logout, initialized } = useAppContext();
+  const { isAuthenticated, userProfile, initialized } = useAppContext();
   const router = useRouter();
 
   // Tunggu context siap sebelum cek login
@@ -46,17 +46,16 @@ const DashboardPage = () => {
   return (
     <>
       <Navbar />
-      <div className="min-h-screen bg-gray-100 py-8 px-4 md:px-8 lg:px-16">
-        <div className="max-w-4xl mx-auto bg-white p-8 rounded-lg shadow-xl">
-          <h1 className="text-4xl font-bold text-gray-900 mb-6 text-center">
-            Selamat Datang, <span className="text-[#129990]">{userProfile.nama_perusahaan_umkm || userProfile.username || 'UMKM'}</span>!
+      <div className="min-h-screen bg-gray-100 py-8 px-2 sm:px-4 md:px-8 lg:px-16">
+        <div className="mx-auto bg-white rounded-lg shadow-xl
+    p-4 sm:p-8 lg:p-12
+    max-w-full sm:max-w-2xl md:max-w-3xl lg:max-w-4xl
+    ">
+          <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 mb-8 text-center">
+            Selamat Datang, <span className="text-[#129990]">{userProfile.nama_perusahaan_umkm}</span>!
           </h1>
-          <p className="text-lg text-gray-700 text-center mb-10">
-            Kelola profil, produk, dan interaksi Anda di sini.
-          </p>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <div className="bg-blue-50 p-6 rounded-lg shadow-md flex flex-col items-center text-center transition-transform hover:scale-105 hover:bg-blue-100">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-10">
+            <div className="bg-blue-50 p-4 sm:p-6 rounded-lg shadow-md flex flex-col items-center text-center w-full max-w-xs mx-auto transition-transform hover:scale-105 hover:bg-blue-100">
               <span className="text-5xl mb-4" role="img" aria-label="profile">👤</span>
               <h2 className="text-xl font-semibold text-gray-800 mb-2">Profil UMKM</h2>
               <p className="text-gray-600 mb-4">Perbarui informasi dasar toko dan kontak Anda.</p>
@@ -65,7 +64,7 @@ const DashboardPage = () => {
               </Link>
             </div>
 
-            <div className="bg-green-50 p-6 rounded-lg shadow-md flex flex-col items-center text-center transition-transform hover:scale-105 hover:bg-green-100">
+            <div className="bg-green-50 p-4 sm:p-6 rounded-lg shadow-md flex flex-col items-center text-center w-full max-w-xs mx-auto transition-transform hover:scale-105 hover:bg-green-100">
               <span className="text-5xl mb-4" role="img" aria-label="products">📦</span>
               <h2 className="text-xl font-semibold text-gray-800 mb-2">Manajemen Produk</h2>
               <p className="text-gray-600 mb-4">Tambahkan, edit, atau hapus produk Anda.</p>
@@ -74,7 +73,7 @@ const DashboardPage = () => {
               </Link>
             </div>
 
-            <div className="bg-purple-50 p-6 rounded-lg shadow-md flex flex-col items-center text-center transition-transform hover:scale-105 hover:bg-purple-100">
+            <div className="bg-purple-50 p-4 sm:p-6 rounded-lg shadow-md flex flex-col items-center text-center w-full max-w-xs mx-auto transition-transform hover:scale-105 hover:bg-purple-100">
               <span className="text-5xl mb-4" role="img" aria-label="feedback">💬</span>
               <h2 className="text-xl font-semibold text-gray-800 mb-2">Ulasan Produk</h2>
               <p className="text-gray-600 mb-4">Lihat feedback dan rating dari pembeli.</p>
@@ -82,15 +81,6 @@ const DashboardPage = () => {
                 Lihat Ulasan
               </Link>
             </div>
-          </div>
-
-          <div className="mt-12 text-center">
-            <button
-              onClick={logout}
-              className="px-8 py-3 bg-red-600 text-white rounded-full font-medium hover:bg-red-700 transition shadow-md"
-            >
-              Logout
-            </button>
           </div>
         </div>
       </div>
