@@ -9,6 +9,7 @@ import Image from 'next/image';
 import { assets } from '@/assets/assets'; // Perbaikan impor
 import Loading from '@/components/Loading'; // Impor komponen Loading
 import Link from 'next/link'; // Import Link for UMKM store navigation
+import toast from 'react-hot-toast';
 
 type FeedbackType = {
   id: string;
@@ -48,6 +49,13 @@ const ProductDetailPage = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [currentImage, setCurrentImage] = useState<number>(0);
+  const [namaPembeli, setNamaPembeli] = useState('');
+  const [rating, setRating] = useState(5);
+  const [komentar, setKomentar] = useState('');
+  const [loadingFeedback, setLoadingFeedback] = useState(false);
+  const [showFeedbackForm, setShowFeedbackForm] = useState(false); // State untuk mengontrol tampilan formulir ulasan
+  const [recentFeedbackId, setRecentFeedbackId] = useState<string | null>(null);
+  const [recentFeedbackTimeout, setRecentFeedbackTimeout] = useState<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
     if (productId) {
@@ -76,6 +84,99 @@ const ProductDetailPage = () => {
       fetchProductDetail();
     }
   }, [productId, backendApiUrl]);
+
+  const handleFeedbackSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!namaPembeli || !komentar || !rating) {
+      toast.error('Semua field wajib diisi.');
+      return;
+    }
+    setLoadingFeedback(true);
+    try {
+      const response = await fetch(
+        `${backendApiUrl}/public/feedback/${productId}`,
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ 
+            nama_pembeli: namaPembeli, 
+            rating: Number(rating),
+            komentar 
+          }),
+        }
+      );
+      const data = await response.json();
+      if (response.ok) {
+        toast.success(data.message || 'Feedback berhasil dikirim!');
+        setNamaPembeli('');
+        setRating(5);
+        setKomentar('');
+        // Simpan ID feedback baru
+        setRecentFeedbackId(data.feedback?.id || null);
+        // Set timeout untuk menghilangkan icon delete setelah 2 menit
+        if (recentFeedbackTimeout) clearTimeout(recentFeedbackTimeout);
+        const timeout = setTimeout(() => setRecentFeedbackId(null), 2 * 60 * 1000);
+        setRecentFeedbackTimeout(timeout);
+        // Tambahkan feedback ke list
+        setProductDetail((prev) =>
+          prev
+            ? {
+                ...prev,
+                feedback: [
+                  {
+                    id: data.feedback?.id || Math.random().toString(),
+                    nama_pembeli: namaPembeli,
+                    rating,
+                    komentar,
+                    created_at: new Date().toISOString(),
+                  },
+                  ...prev.feedback,
+                ],
+              }
+            : prev
+        );
+      } else {
+        toast.error(data.error || 'Gagal mengirim feedback.');
+      }
+    } catch {
+      toast.error('Gagal mengirim feedback.');
+    } finally {
+      setLoadingFeedback(false);
+    }
+  };
+
+  const handleDeleteFeedback = async (feedbackId: string) => {
+    if (!confirm("Yakin ingin menghapus ulasan ini?")) return;
+    try {
+      const response = await fetch(
+        `${backendApiUrl}/public/feedback/${feedbackId}`,
+        { method: "DELETE" }
+      );
+      const data = await response.json();
+      if (response.ok) {
+        toast.success(data.message || "Ulasan berhasil dihapus!");
+        setProductDetail((prev) =>
+          prev
+            ? {
+                ...prev,
+                feedback: prev.feedback.filter((f) => f.id !== feedbackId),
+              }
+            : prev
+        );
+        setRecentFeedbackId(null);
+      } else {
+        toast.error(data.error || "Gagal menghapus ulasan.");
+      }
+    } catch {
+      toast.error("Gagal menghapus ulasan.");
+    }
+  };
+
+  useEffect(() => {
+    return () => {
+      if (recentFeedbackTimeout) clearTimeout(recentFeedbackTimeout);
+    };
+  }, [recentFeedbackTimeout]);
 
   if (loading) {
     return (
@@ -235,27 +336,32 @@ const ProductDetailPage = () => {
             )}
           </div>
 
-          {/* Daftar Feedback */}
-          <div className="mt-8">
-            <h2 className="text-2xl font-semibold text-gray-800 mb-4">Ulasan Produk ({feedback.length})</h2>
-            {feedback.length === 0 ? (
-              <p className="text-gray-600">Belum ada ulasan untuk produk ini. Jadilah yang pertama memberikan ulasan!</p>
-            ) : (
-              <div className="space-y-4">
-                {feedback.map((f: FeedbackType) => (
-                    <div key={f.id} className="bg-gray-50 p-4 rounded-lg shadow-sm">
+          <div className="flex items-center justify-between gap-4 mb-4">
+            <h2 className="text-2xl font-semibold text-gray-800 m-0 p-0">
+              Ulasan Produk ({feedback.length})
+            </h2>
+            <button
+              className="px-6 py-2 bg-[#129990] text-white rounded-full font-semibold hover:bg-opacity-90 transition whitespace-nowrap"
+              onClick={() => setShowFeedbackForm((prev) => !prev)}
+            >
+              {showFeedbackForm ? "Tutup Form Ulasan" : "Buat Ulasan"}
+            </button>
+          </div>
+          {feedback.length === 0 ? (
+            <p className="text-gray-600">Belum ada ulasan untuk produk ini. Jadilah yang pertama memberikan ulasan!</p>
+          ) : (
+            <div className="space-y-4">
+              {feedback.map((f: FeedbackType) => (
+                <div key={`${f.id}-${f.nama_pembeli}`} className="bg-gray-50 p-4 rounded-lg shadow-sm flex justify-between items-start group">
+                  <div>
                     <div className="flex items-center gap-2 mb-2">
                       <p className="font-medium">{f.nama_pembeli}</p>
                       <div className="flex items-center gap-0.5">
                         {Array.from({ length: 5 }).map((_, index) => (
                           <Image
-                            key={index} // Masih aman menggunakan index di sini karena array statis dan tidak berubah urutan
+                            key={index}
                             className="h-3 w-3"
-                            src={
-                              index < Math.floor(f.rating)
-                                ? assets.star_icon
-                                : assets.star_dull_icon
-                            }
+                            src={index < Math.floor(f.rating) ? assets.star_icon : assets.star_dull_icon}
                             alt="star_icon"
                           />
                         ))}
@@ -270,10 +376,78 @@ const ProductDetailPage = () => {
                     </div>
                     <p className="text-gray-700">{f.komentar}</p>
                   </div>
-                ))}
-              </div>
-            )}
-          </div>
+                  {/* Icon Delete hanya muncul jika feedback ini adalah yang baru dibuat */}
+                  {f.id === recentFeedbackId && (
+                    <button
+                      onClick={() => handleDeleteFeedback(f.id)}
+                      className="opacity-60 hover:opacity-100 ml-4 mt-1 group-hover:opacity-100 transition"
+                      title="Hapus ulasan"
+                    >
+                      <Image
+                        src={assets.error_icon}
+                        alt="Delete"
+                        width={20}
+                        height={20}
+                        unoptimized
+                      />
+                    </button>
+                  )}
+                </div>
+              ))}
+            </div>
+          )}
+          {showFeedbackForm && (
+            <div className="mt-4 mb-8">
+              <h2 className="text-xl font-semibold text-gray-800 mb-4">Tulis Ulasan Anda</h2>
+              <form onSubmit={handleFeedbackSubmit} className="bg-gray-50 p-4 rounded-lg shadow-sm space-y-4">
+                <div>
+                  <label className="block text-sm font-medium mb-1">Nama Anda</label>
+                  <input
+                    type="text"
+                    className="w-full px-4 py-2 border rounded"
+                    value={namaPembeli}
+                    onChange={(e) => setNamaPembeli(e.target.value)}
+                    required
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium mb-1">Rating</label>
+                  <div className="flex gap-1">
+                    {Array.from({ length: 5 }).map((_, idx) => (
+                      <button
+                        type="button"
+                        key={idx}
+                        className={`text-2xl ${rating > idx ? 'text-yellow-400' : 'text-gray-300'}`}
+                        onClick={() => setRating(idx + 1)}
+                        aria-label={`Beri rating ${idx + 1}`}
+                      >
+                        ★
+                      </button>
+                    ))}
+                    <span className="ml-2 text-sm text-gray-500">{rating}/5</span>
+                  </div>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium mb-1">Komentar</label>
+                  <textarea
+                    className="w-full px-4 py-2 border rounded"
+                    value={komentar}
+                    onChange={(e) => setKomentar(e.target.value)}
+                    required
+                    rows={3}
+                    placeholder="Tulis ulasan Anda di sini..."
+                  />
+                </div>
+                <button
+                  type="submit"
+                  className="px-8 py-2 bg-[#129990] text-white rounded-full font-semibold hover:bg-opacity-90 transition"
+                  disabled={loadingFeedback}
+                >
+                  {loadingFeedback ? 'Mengirim...' : 'Kirim Ulasan'}
+                </button>
+              </form>
+            </div>
+          )}
         </div>
       </div>
       <Footer />
