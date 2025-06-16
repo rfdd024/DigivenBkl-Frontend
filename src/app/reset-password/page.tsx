@@ -1,7 +1,3 @@
-// ✅ Ini adalah versi aman untuk Vercel build (Next.js App Router)
-// ⛑ `useSearchParams()` tetap digunakan di Client Component
-// 🔁 Kamu hanya perlu import & render file ini dari `app/reset-password/page.tsx`
-
 "use client";
 
 import React, { useEffect, useState } from 'react';
@@ -13,7 +9,7 @@ import Footer from '@/components/Footer';
 import toast from 'react-hot-toast';
 import Image from "next/image";
 
-const ResetPasswordPage = () => {
+const ResetPasswordClient = () => {
   const searchParams = useSearchParams();
   const router = useRouter();
   const { backendApiUrl } = useAppContext();
@@ -127,36 +123,42 @@ const ResetPasswordPage = () => {
                 {status !== 'error' && token && (
                   <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
                     <div className="">
-                      <input
-                        id="new-password"
-                        name="newPassword"
-                        type="password"
-                        autoComplete="new-password"
-                        required
-                        className="input-auth"
-                        placeholder="Kata Sandi Baru (minimal 6 karakter)"
-                        value={newPassword}
-                        onChange={(e) => setNewPassword(e.target.value)}
-                      />
-                      <input
-                        id="confirm-password"
-                        name="confirmPassword"
-                        type="password"
-                        autoComplete="new-password"
-                        required
-                        className="input-auth mt-4"
-                        placeholder="Konfirmasi Kata Sandi Baru"
-                        value={confirmPassword}
-                        onChange={(e) => setConfirmPassword(e.target.value)}
-                      />
+                      <div>
+                        <input
+                          id="new-password"
+                          name="newPassword"
+                          type="password"
+                          autoComplete="new-password"
+                          required
+                          className="input-auth"
+                          placeholder="Kata Sandi Baru (minimal 6 karakter)"
+                          value={newPassword}
+                          onChange={(e) => setNewPassword(e.target.value)}
+                        />
+                      </div>
+                      <div>
+                        <input
+                          id="confirm-password"
+                          name="confirmPassword"
+                          type="password"
+                          autoComplete="new-password"
+                          required
+                          className="input-auth mt-4"
+                          placeholder="Konfirmasi Kata Sandi Baru"
+                          value={confirmPassword}
+                          onChange={(e) => setConfirmPassword(e.target.value)}
+                        />
+                      </div>
                     </div>
-                    <button
-                      type="submit"
-                      className="btn-auth"
-                      disabled={loading}
-                    >
-                      {loading ? 'Mereset...' : 'Reset Kata Sandi'}
-                    </button>
+                    <div>
+                      <button
+                        type="submit"
+                        className="btn-auth"
+                        disabled={loading}
+                      >
+                        {loading ? 'Mereset...' : 'Reset Kata Sandi'}
+                      </button>
+                    </div>
                     <div className="text-center text-sm mt-4">
                       <button
                           type="button"
@@ -186,4 +188,4 @@ const ResetPasswordPage = () => {
   );
 };
 
-export default ResetPasswordPage;
+export default ResetPasswordClient;
