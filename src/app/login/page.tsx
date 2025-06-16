@@ -133,14 +133,14 @@ const LoginPage = () => {
                 onClick={() => setMode('forgot-password')}
                 className="text-[#129990] hover:underline text-sm font-medium" // Added font-medium
               >
-                Lupa Kata Sandi ?
+                Lupa Kata Sandi?
               </button>
               <button
                 type="button"
                 onClick={() => setMode('resend-verification')}
                 className="text-[#129990] hover:underline text-sm font-medium" // Added font-medium
               >
-                Tidak dapat Email Verifikasi ?
+                Tidak dapat Email Verifikasi?
               </button>
             </div>
             <div className="text-center text-sm mt-4"> {/* Increased mt to 4 */}
@@ -314,7 +314,7 @@ const LoginPage = () => {
 
   const getTitle = () => {
     switch (mode) {
-      case 'login': return 'Selamat Datang Kembali!'; // More welcoming title
+      case 'login': return 'Selamat Datang Kembali'; // More welcoming title
       case 'register': return 'Mulai Perjalanan UMKM Anda'; // More engaging title
       case 'forgot-password': return 'Atur Ulang Kata Sandi Anda'; // More action-oriented title
       case 'resend-verification': return 'Kirim Ulang Email Verifikasi';
@@ -325,37 +325,42 @@ const LoginPage = () => {
   return (
     <>
       <Navbar />
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#f0f2f5] to-[#ffffff] py-12 px-4 sm:px-6 lg:px-8"> {/* Adjusted gradient for softer look */}
-        <div className="max-w-md w-full bg-white rounded-xl shadow-lg p-8 sm:p-10 space-y-8 border border-gray-100"> {/* Softer shadow, slightly larger padding, border */}
-          <div className="flex flex-col items-center">
-            <Image src={assets.logo} alt="Logo" width={72} height={72} className="mb-4" /> {/* Larger logo, increased mb */}
-            <h2 className="text-3xl font-extrabold text-gray-900 mb-2 text-center">{getTitle()}</h2> {/* Font-extrabold, text-center */}
-            <p className="text-gray-600 text-base text-center"> {/* Slightly darker text, base font size */}
-              {mode === "login"
-                ? "Masuk ke akun Anda untuk melanjutkan." // More concise
-                : mode === "register"
-                ? "Daftarkan UMKM Anda dan jangkau pasar lebih luas." // More benefit-oriented
-                : mode === "forgot-password"
-                ? "Kami akan mengirimkan instruksi ke email Anda." // Clearer instruction
-                : mode === "resend-verification"
-                ? "Masukkan email Anda untuk menerima email verifikasi baru." // Clearer instruction
-                : ""}
-            </p>
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#f0f2f5] to-[#ffffff] py-12 px-4 sm:px-6 lg:px-8">
+        <div className="flex w-full max-w-5xl rounded-xl shadow-lg overflow-hidden border border-gray-100 bg-white">
+          {/* Left: Form */}
+          <div className="w-full md:w-1/2 flex flex-col justify-center px-8 sm:px-10 py-12 space-y-8">
+            <div className="flex flex-col items-center">
+              <h2 className="text-3xl font-extrabold text-gray-900 mb-2 text-center">{getTitle()}</h2>
+              <p className="text-gray-600 text-base text-center">
+                {mode === "login"
+                  ? "Masuk ke akun Anda untuk melanjutkan!"
+                  : mode === "register"
+                  ? "Daftarkan UMKM Anda dan jangkau pasar lebih luas!"
+                  : mode === "forgot-password"
+                  ? "Kami akan mengirimkan instruksi ke email Anda."
+                  : mode === "resend-verification"
+                  ? "Masukkan email Anda untuk menerima email verifikasi baru!"
+                  : ""}
+              </p>
+            </div>
+            <form className="space-y-6" onSubmit={handleAuthSubmit}>
+              {renderFormContent()}
+            </form>
           </div>
-          <form className="space-y-6" onSubmit={handleAuthSubmit}> {/* Increased space-y to 6 */}
-            {renderFormContent()}
-          </form>
+
+          {/* Right: Banner */}
+          <div className="hidden md:flex w-1/2 items-center justify-center bg-[#FFFBDE] px-8 py-12">
+            <Image
+              src={assets.logo}
+              alt="Logo"
+              width={180}
+              height={180}
+              className="object-contain"
+            />
+          </div>
         </div>
       </div>
       <Footer />
-      <style jsx global>{`
-        .input-auth {
-          @apply w-full px-4 py-3 rounded-xl border border-gray-300 focus:border-[#129990] focus:ring-2 focus:ring-[#129990]/20 outline-none transition duration-200 ease-in-out text-gray-800 placeholder-gray-500; /* Rounded-xl, stronger focus ring, smoother transition, darker text, darker placeholder */
-        }
-        .btn-auth {
-          @apply w-full py-3 rounded-xl bg-[#129990] text-white font-bold hover:bg-[#0e7c7a] transition duration-200 ease-in-out shadow-md hover:shadow-lg; /* Rounded-xl, font-bold, smoother transition, stronger shadow */
-        }
-      `}</style>
     </>
   );
 };

@@ -1,3 +1,4 @@
+"use client";
 import React, { useState, useEffect } from "react";
 import { assets } from "@/assets/assets";
 import Image from "next/image";
@@ -10,7 +11,7 @@ const HeaderSlider = () => {
       offer: "Penawaran Terbatas Diskon 30%",
       buttonText1: "Beli Sekarang",
       buttonText2: "Cari Lebih Banyak",
-      imgSrc: assets.header_headphone_image, // Ganti dengan gambar UMKM jika ada
+      imgSrc: assets.food1,
     },
     {
       id: 2,
@@ -18,7 +19,7 @@ const HeaderSlider = () => {
       offer: "Segera! Produk Terbaru!",
       buttonText1: "Lihat Toko",
       buttonText2: "Jelajahi Promo",
-      imgSrc: assets.header_playstation_image, // Ganti dengan gambar UMKM jika ada
+      imgSrc: assets.drink,
     },
     {
       id: 3,
@@ -26,7 +27,7 @@ const HeaderSlider = () => {
       offer: "Diskon Eksklusif 40%",
       buttonText1: "Pesan Sekarang",
       buttonText2: "Pelajari Lebih Lanjut",
-      imgSrc: assets.header_macbook_image, // Ganti dengan gambar UMKM jika ada
+      imgSrc: assets.food2,
     },
   ];
 
@@ -54,35 +55,43 @@ const HeaderSlider = () => {
         {sliderData.map((slide, index) => (
           <div
             key={slide.id}
-            className="flex flex-col-reverse md:flex-row items-center justify-between bg-[#E6E9F2] py-8 md:px-14 px-5 mt-6 rounded-xl min-w-full"
+            className="flex flex-col-reverse md:flex-row items-center justify-between bg-[#FFFBDE] py-8 md:px-14 px-5 mt-6 rounded-xl min-w-full"
           >
+            {/* Text Content */}
             <div className="md:pl-8 mt-10 md:mt-0">
               <p className="md:text-base text-[#096B68] pb-1">{slide.offer}</p>
               <h1 className="max-w-lg md:text-[40px] md:leading-[48px] text-2xl font-semibold">
                 {slide.title}
               </h1>
-              <div className="flex items-center mt-4 md:mt-6 ">
-                <button className="md:px-10 px-7 md:py-2.5 py-2 bg-[#129990] rounded-full text-white font-medium">
+              <div className="flex items-center mt-4 md:mt-6">
+                <button className="md:px-10 px-7 md:py-2.5 py-2 bg-[#129990] rounded-full text-white font-medium hover:cursor-pointer">
                   {slide.buttonText1}
                 </button>
-                <button className="group flex items-center gap-2 px-6 py-2.5 font-medium">
+                <button className="group flex items-center gap-2 px-6 py-2.5 font-medium hover:cursor-pointer">
                   {slide.buttonText2}
-                  <Image className="group-hover:translate-x-1 transition" src={assets.arrow_icon} alt="arrow_icon" />
+                  <Image
+                    className="group-hover:translate-x-1 transition"
+                    src={assets.arrow_icon}
+                    alt="arrow_icon"
+                  />
                 </button>
               </div>
             </div>
+
+            {/* Image */}
             <div className="flex items-center flex-1 justify-center">
               <Image
                 className="md:w-72 w-48"
                 src={slide.imgSrc}
                 alt={`Slide ${index + 1}`}
-                unoptimized // Tambahkan unoptimized untuk gambar dari URL eksternal
+                unoptimized
               />
             </div>
           </div>
         ))}
       </div>
 
+      {/* Pagination Bullets */}
       <div className="flex items-center justify-center gap-2 mt-8">
         {sliderData.map((_, index) => (
           <div

@@ -62,7 +62,7 @@ export const AppContextProvider = ({ children }: { children: ReactNode }) => {
   const [umkms, setUmkms] = useState<UmkmProfile[]>([]);
   const [initialized, setInitialized] = useState(false);
 
-  const backendApiUrl = process.env.NEXT_PUBLIC_BACKEND_API_URL || 'http://localhost:4000/api/v1';
+  const backendApiUrl = process.env.NEXT_PUBLIC_BACKEND_API_URL || 'https://digiven-bengkulu-backend.vercel.app/';
   const currency = process.env.NEXT_PUBLIC_CURRENCY || 'Rp';
 
   // Fungsi logout menggunakan useCallback untuk stabilitas
@@ -103,7 +103,7 @@ export const AppContextProvider = ({ children }: { children: ReactNode }) => {
   // Ambil produk publik untuk halaman Produk
   const fetchProducts = useCallback(async () => {
     try {
-      const response = await fetch(`${backendApiUrl}/public/products`);
+      const response = await fetch(`${backendApiUrl}/api/v1/public/products`);
       if (!response.ok) {
         throw new Error('Gagal mengambil produk');
       }

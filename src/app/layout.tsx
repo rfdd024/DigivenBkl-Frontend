@@ -7,7 +7,7 @@ import { Toaster } from "react-hot-toast";
 const outfit = Outfit({ subsets: ["latin"], weight: ["300", "400", "500", "600", "700"] });
 
 export const metadata: Metadata = {
-  title: "UMKM - DIGIVEN",
+  title: "Digiven | UMKM Bengkulu",
   description: "Aplikasi untuk membantu UMKM dalam mengelola bisnis mereka dengan lebih efisien.",
 };
 

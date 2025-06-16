@@ -7,6 +7,9 @@ import order_icon from "./order_icon.svg";
 import instagram_icon from "./instagram_icon.svg";
 import facebook_icon from "./facebook_icon.svg";
 import twitter_icon from "./twitter_icon.svg";
+import ig_ic from "./instagram2_icon.png";
+import fb_ic from "./facebook2_icon.png";
+import twit_ic from "./twitter2_icon.png";
 import box_icon from "./box_icon.svg";
 import product_list_icon from "./product_list_icon.svg";
 import menu_icon from "./menu_icon.svg";
@@ -47,6 +50,13 @@ import product_details_page_apple_earphone_image2 from "./product_details_page_a
 import product_details_page_apple_earphone_image3 from "./product_details_page_apple_earphone_image3.png";
 import product_details_page_apple_earphone_image4 from "./product_details_page_apple_earphone_image4.png";
 import product_details_page_apple_earphone_image5 from "./product_details_page_apple_earphone_image5.png";
+import food1 from "./nasgor.png";
+import food2 from "./bakso.png";
+import food3 from "./miayam.png";
+import food4 from "./migor.png";
+import food5 from "./wajik.png";
+import drink from "./tea.png";
+import drink2 from "./coffe.png";
 
 // Placeholder image untuk produk yang tidak memiliki gambar atau error
 const placeholder_image = "https://placehold.co/600x400/CCCCCC/000000.png?text=No+Image";
@@ -62,6 +72,9 @@ export const assets = {
   instagram_icon,
   facebook_icon,
   twitter_icon,
+  ig_ic,
+  fb_ic,
+  twit_ic,
   box_icon,
   product_list_icon,
   menu_icon,
@@ -102,7 +115,14 @@ export const assets = {
   product_details_page_apple_earphone_image5,
   checkmark,
   placeholder_image,
-  error_icon
+  error_icon,
+  food1,
+  food2,
+  food3,
+  food4,
+  food5,
+  drink,
+  drink2 
 };
 
 export const BagIcon = () => {

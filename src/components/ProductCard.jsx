@@ -36,13 +36,6 @@ const ProductCard = ({ product }) => {
                     }}
                     unoptimized
                 />
-                <button className="absolute top-2 right-2 bg-white p-2 rounded-full shadow-md">
-                    <Image
-                        className="h-3 w-3"
-                        src={assets.heart_icon}
-                        alt="heart_icon"
-                    />
-                </button>
             </div>
 
             <p className="md:text-base font-medium pt-2 w-full truncate">{product.nama_produk}</p>

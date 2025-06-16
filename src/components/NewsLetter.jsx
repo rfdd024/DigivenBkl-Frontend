@@ -15,7 +15,7 @@ const NewsLetter = () => {
           type="email" // Ubah type menjadi email
           placeholder="Masukkan alamat email Anda"
         />
-        <button className="md:px-12 px-8 h-full text-white bg-orange-600 rounded-md rounded-l-none">
+        <button className="md:px-12 px-8 h-full text-white bg-[#129990] rounded-md rounded-l-none">
           Berlangganan
         </button>
       </div>
