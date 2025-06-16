@@ -1,3 +1,7 @@
+// ✅ Ini adalah versi aman untuk Vercel build (Next.js App Router)
+// ⛑ `useSearchParams()` tetap digunakan di Client Component
+// 🔁 Kamu hanya perlu import & render file ini dari `app/reset-password/page.tsx`
+
 "use client";
 
 import React, { useEffect, useState } from 'react';
@@ -27,7 +31,7 @@ const ResetPasswordPage = () => {
       setToken(tokenFromUrl);
     } else {
       setStatus('error');
-      setMessage('Token reset kata sandi tidak ditemukan di URL. Silakan kembali ke halaman lupa kata sandi.'); // More helpful message
+      setMessage('Token reset kata sandi tidak ditemukan di URL. Silakan kembali ke halaman lupa kata sandi.');
       toast.error('Token reset kata sandi tidak ditemukan.');
     }
   }, [searchParams]);
@@ -51,7 +55,7 @@ const ResetPasswordPage = () => {
       return;
     }
 
-    if (newPassword.length < 6) { // Minimal 6 karakter
+    if (newPassword.length < 6) {
         setMessage('Kata sandi baru minimal 6 karakter.');
         toast.error('Kata sandi terlalu pendek.');
         setLoading(false);
@@ -75,7 +79,7 @@ const ResetPasswordPage = () => {
         toast.success(data.message || 'Kata sandi berhasil direset!');
       } else {
         setStatus('error');
-        setMessage(data.error || 'Gagal mereset kata sandi. Pastikan link tidak kadaluarsa.'); // More specific error
+        setMessage(data.error || 'Gagal mereset kata sandi. Pastikan link tidak kadaluarsa.');
         toast.error(data.error || 'Gagal mereset kata sandi.');
       }
     } catch (error) {
@@ -123,42 +127,36 @@ const ResetPasswordPage = () => {
                 {status !== 'error' && token && (
                   <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
                     <div className="">
-                      <div>
-                        <input
-                          id="new-password"
-                          name="newPassword"
-                          type="password"
-                          autoComplete="new-password"
-                          required
-                          className="input-auth"
-                          placeholder="Kata Sandi Baru (minimal 6 karakter)"
-                          value={newPassword}
-                          onChange={(e) => setNewPassword(e.target.value)}
-                        />
-                      </div>
-                      <div>
-                        <input
-                          id="confirm-password"
-                          name="confirmPassword"
-                          type="password"
-                          autoComplete="new-password"
-                          required
-                          className="input-auth mt-4"
-                          placeholder="Konfirmasi Kata Sandi Baru"
-                          value={confirmPassword}
-                          onChange={(e) => setConfirmPassword(e.target.value)}
-                        />
-                      </div>
+                      <input
+                        id="new-password"
+                        name="newPassword"
+                        type="password"
+                        autoComplete="new-password"
+                        required
+                        className="input-auth"
+                        placeholder="Kata Sandi Baru (minimal 6 karakter)"
+                        value={newPassword}
+                        onChange={(e) => setNewPassword(e.target.value)}
+                      />
+                      <input
+                        id="confirm-password"
+                        name="confirmPassword"
+                        type="password"
+                        autoComplete="new-password"
+                        required
+                        className="input-auth mt-4"
+                        placeholder="Konfirmasi Kata Sandi Baru"
+                        value={confirmPassword}
+                        onChange={(e) => setConfirmPassword(e.target.value)}
+                      />
                     </div>
-                    <div>
-                      <button
-                        type="submit"
-                        className="btn-auth"
-                        disabled={loading}
-                      >
-                        {loading ? 'Mereset...' : 'Reset Kata Sandi'}
-                      </button>
-                    </div>
+                    <button
+                      type="submit"
+                      className="btn-auth"
+                      disabled={loading}
+                    >
+                      {loading ? 'Mereset...' : 'Reset Kata Sandi'}
+                    </button>
                     <div className="text-center text-sm mt-4">
                       <button
                           type="button"
